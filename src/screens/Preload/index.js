@@ -17,16 +17,18 @@ export default props => {
             const token = await AsyncStorage.getItem('token')
 
             if(token !== null) {
-                let res = await Api.checkToken(token)
+                let res = await Api.checkToken(token)  
                 
                 if(res && res.token) {
+                    await AsyncStorage.setItem('token', res.token)
+
                     userDispatch({
                         type: 'setAvatar',
                         payload: {
                             avatar: res.data.avatar
                         } 
                     })
-    
+
                     navigation.reset({
                         routes: [{name: 'MainTab'}]
                     })

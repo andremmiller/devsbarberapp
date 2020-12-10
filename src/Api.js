@@ -1,16 +1,17 @@
 import axios from 'axios'
+import AsyncStorage from '@react-native-community/async-storage'
 const BASE_API = 'https://devsbarber.api.amapps.com.br/api'
 
 export default {
     checkToken: async (token) => {
         try {  
-            const res = axios.post(`${BASE_API}/auth/refresh`, {
+            const res = await axios.post(`${BASE_API}/auth/refresh`, {
                 token
-            })
+            })      
+            
             return res.data
             
         } catch(e) {
-            console.log('ERROR: ' + e)
             return false
         }
     },
@@ -30,5 +31,16 @@ export default {
         })
 
         return res.data
+    },
+    getBarbers: async () => {
+        try {
+            const token = await AsyncStorage.getItem('token')
+            //console.log(token)
+            const req = await axios.get(`${BASE_API}/barbers?token=${token}`)
+            return req.data
+        } catch(e) {
+            console.log(e)
+            return false
+        }
     }
 }
