@@ -31,6 +31,7 @@ export default props => {
                         routes: [{name: 'MainTab'}]
                     })
                 } else {
+                    console.warn(token)
                     navigation.navigate('SignIn')
                 }
             } else {
