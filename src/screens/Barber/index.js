@@ -77,8 +77,15 @@ export default () => {
         getBarbetExtraInfo()
     }, [])
 
-    const handleFavClick = () => {
-        setFavourited(!favourited)
+    const handleFavClick = async () => {
+        let res = await Api.setFavourite(barberInfo.id)
+
+        if(res.error == '') {
+            setFavourited(res.have)
+        } else {
+            alert(res.error)
+        }
+        // setFavourited(!favourited)
     }
 
     const handleBackButton = () => {
@@ -140,7 +147,7 @@ export default () => {
                             {barberInfo.services.map((service, key) => (
                                 <ServiceItem key={key}>
                                     <ServiceInfo>
-                                        <ServiceName>{service.name}</ServiceName>
+                                        <ServiceName>{service.name} - {service.id}</ServiceName>
                                         <ServicePrice>{service.price.toFixed(2)}</ServicePrice>
                                     </ServiceInfo>
                                     <ServiceChooseButton onPress={() => handleServiceChoose(key)}>

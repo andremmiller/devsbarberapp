@@ -86,7 +86,7 @@ export default () => {
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }>
                 <HeaderArea>
-                    <HeaderTitle numberOfLines={2}>Encontre o seu barbeiro favorito</HeaderTitle>
+                    <HeaderTitle numberOfLines={2}>Encontre o seu barbeiro favorito!!</HeaderTitle>
                     <SearchButton onPress={() => navigation.navigate('Search')}>
                         <SearchIcon width="26" height="26" fill="#FFF" />
                     </SearchButton>

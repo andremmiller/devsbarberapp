@@ -155,7 +155,7 @@ export default ({show, setShow, barberInfo, service}) => {
     const navigation = useNavigation()
 
     const [selectedYear, setSelectedYear] = useState(0)
-    const [selectedMonth, setSelectedMonth] = useState(0)
+    const [selectedMonth, setSelectedMonth] = useState(null)
     const [selectedDay, setSelectedDay] = useState(0)
     const [selectedHour, setSelectedHour] = useState(null)
     const [listDays, setListDays] = useState([])
@@ -199,11 +199,12 @@ export default ({show, setShow, barberInfo, service}) => {
 
     useEffect(() => {
         if(barberInfo.availability && selectedDay > 0) {
+            console.log('AVAILABILITY!')
             let d = new Date(selectedYear, selectedMonth, selectedDay)
             let month = selectedMonth + 1
             month = (month < 10) ? '0'+month : month
             let dtStr = selectedYear + '-' + month + '-' + selectedDay
-
+            console.log(dtStr)
             let availability = barberInfo.availability.filter(e => e.date == dtStr)
 
             if(availability.length > 0) {
@@ -220,22 +221,35 @@ export default ({show, setShow, barberInfo, service}) => {
             barberInfo.id &&
             service != null &&
             selectedYear > 0 &&
-            selectedMonth > 0 &&
+            selectedMonth != null &&
             selectedDay > 0 &&
             selectedHour != null
         ) {
-            // let res = await Api.setAppointment(
-            //     barberInfo.id,
-            //     service,
-            //     selectedYear,
-            //     selectedMonth,
-            //     selectedDay,
-            //     selectedHour
-            // )
+            let hour = parseInt(selectedHour.split(':')[0])
+            let res = await Api.setAppointment(barberInfo.id, barberInfo.services[service].id, selectedYear, selectedMonth + 1, selectedDay, hour)
 
-            setShow(false)
-            navigation.navigate('Appointments')
+            if(res.error == '') {
+                setShow(false)
+                navigation.navigate('Appointments')
+            } else {
+                // console.log('barbeInfoID: ' + barberInfo.id)
+                // console.log('service: ' + barberInfo.services[service].id)
+                // console.log('year: ' + selectedYear)
+                // console.log('month: ' + selectedMonth)
+                // console.log('day: ' + selectedDay)
+                // console.log('hour: ' + parseInt(selectedHour.split(':')[0]))
+                
+                alert(res.error)
+            }
+            
         } else {
+            // console.log('barbeInfoID: ' + barberInfo.id)
+            // console.log('service: ' + barberInfo.services[service].id)
+            // console.log('year: ' + selectedYear)
+            // console.log('month: ' + selectedMonth)
+            // console.log('day: ' + selectedDay)
+            // console.log('hour: ' + selectedHour)
+
             alert('Preencha todos os dados!')
         }
     }

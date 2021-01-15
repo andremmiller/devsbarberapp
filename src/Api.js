@@ -64,17 +64,16 @@ export default {
        // console.log(req.data)
         return req.data
     },
-    setAppointment: async(barberIid, service, selectedYear, selectedMonth, selectedDay, selectedHour) => {
+    setAppointment: async(barberId, service, selectedYear, selectedMonth, selectedDay, selectedHour) => {
         try {
             const token = await AsyncStorage.getItem('token')
 
-            const req = await axios.post(`${BASE_API}/user/appointment?token=${token}`, {
-                barberId,
+            const req = await axios.post(`${BASE_API}/barber/${barberId}/appointment?token=${token}`, {
                 service,
-                selectedYear,
-                selectedMonth,
-                selectedDay,
-                selectedHour
+                'year': selectedYear,
+                'month': selectedMonth,
+                'day': selectedDay,
+                'hour': selectedHour
             })
             
             // console.log(req.data)
@@ -83,5 +82,34 @@ export default {
            // console.log(e)
             return false
         }
-    }
+    },
+    search: async (barberName) => {
+        const token = await AsyncStorage.getItem('token')
+        const req = await axios.get(`${BASE_API}/search?token=${token}&q=${barberName}`)
+
+       // console.log(req.data)
+        return req.data
+    },
+    getFavourites: async (barberName) => {
+        const token = await AsyncStorage.getItem('token')
+        const req = await axios.get(`${BASE_API}/user/favourites?token=${token}`)
+
+       // console.log(req.data)
+        return req.data
+    },
+    setFavourite: async (barberId) => {
+        try {
+            const token = await AsyncStorage.getItem('token')
+
+            const res = await axios.post(`${BASE_API}/user/favourite?token=${token}`, {
+                'barber': barberId 
+            })
+            
+            // console.log(req.data)
+            return res.data
+        } catch(e) {
+            console.log(e)
+            return false
+        }
+    },
 }
